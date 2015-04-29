@@ -394,7 +394,7 @@ def mock_send_request(monkeypatch, set_oauth_credentials):
             content_type='application/json'
         )
 
-        response.getcode = lambda: response.status_int
+        # response.getcode = lambda: response.status_int
         return response
 
     from treeherder.client import TreeherderRequest

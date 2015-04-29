@@ -3,6 +3,7 @@
 # file, you can obtain one at http://mozilla.org/MPL/2.0/.
 
 import pytest
+import requests
 from webtest.app import TestApp
 
 from treeherder.etl.mixins import OAuthLoaderMixin
@@ -44,3 +45,17 @@ def mock_post_json_data(monkeypatch, jm):
             return response
 
     monkeypatch.setattr(OAuthLoaderMixin, 'load', _post_json_data)
+
+@pytest.fixture
+def mock_request_post(monkeypatch, jm):
+    def _post(uri, data, headers):
+
+        if data:
+
+            response = TestApp(application).post_json(
+                uri, params=data
+            )
+            return response
+
+    monkeypatch.setattr(requests, 'post', _post)
+

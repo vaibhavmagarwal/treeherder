@@ -9,6 +9,15 @@ import json
 
 from django.conf import settings
 
+@pytest.fixture
+def mock_settings_localhost(monkeypatch):
+    monkeypatch.setattr(settings,
+                        'TREEHERDER_REQUEST_PROTOCOL',
+                        "https")
+    monkeypatch.setattr(settings,
+                        'TREEHERDER_REQUEST_HOST',
+                        "localhost:8000")
+
 
 @pytest.fixture
 def mock_buildapi_pending_url(monkeypatch):
@@ -103,7 +112,8 @@ def mock_buildapi_builds4h_missing_branch_url(monkeypatch):
 
 def test_ingest_pending_jobs(jm, initial_data,
                              mock_buildapi_pending_url,
-                             mock_post_json_data,
+                             # mock_post_json_data,
+                             mock_settings_localhost,
                              mock_log_parser,
                              mock_get_resultset,
                              mock_get_remote_content):
@@ -119,6 +129,7 @@ def test_ingest_pending_jobs(jm, initial_data,
 
     jm.disconnect()
 
+    assert False
     assert len(stored_obj) == 1
 
 
